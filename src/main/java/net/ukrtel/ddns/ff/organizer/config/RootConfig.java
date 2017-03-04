@@ -11,7 +11,7 @@ import static org.springframework.context.annotation.ComponentScan.Filter;
 
 @Configuration
 @ComponentScan(basePackages = "net.ukrtel.ddns.ff", excludeFilters = {
-    @Filter(type = FilterType.ANNOTATION, value = EnableWebMvc.class)
+        @Filter(type = FilterType.ANNOTATION, value = EnableWebMvc.class)
 })
 public class RootConfig {
     // configuring placeholders bean to work with properties
