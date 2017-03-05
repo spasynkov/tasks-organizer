@@ -39,4 +39,40 @@ public class UserService implements UserDetailsService {
 
         throw new UsernameNotFoundException("User '" + username + "' not found.");
     }
+
+    public User addUser(String username, String password) {
+        User user = createUser(username, password, false);
+        return usersRepository.save(user);
+    }
+
+    public User addAdmin(String username, String password) {
+        User admin = createUser(username, password, true);
+        return usersRepository.save(admin);
+    }
+
+    public void updateUser(long id, String username, String password, boolean isAdmin) {
+        User user = usersRepository.findOne(id);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setAdmin(isAdmin);
+        usersRepository.save(user);
+    }
+
+    public void changePassword(long userId, String newPassword) {
+        User user = usersRepository.findOne(userId);
+        user.setPassword(newPassword);
+        usersRepository.save(user);
+    }
+
+    public void removeUserById(long id) {
+        usersRepository.delete(id);
+    }
+
+    private User createUser(String username, String password, boolean isAdmin) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setAdmin(isAdmin);
+        return user;
+    }
 }

@@ -62,7 +62,7 @@ public class DatabaseConfig {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         bean.setDataSource(dataSource);
         bean.setJpaVendorAdapter(jpaVendorAdapter);
-        /*Properties properties = new Properties();;
+        /*Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "create");
         bean.setJpaProperties(properties);*/
         bean.setPackagesToScan(domainPackages);
