@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping({"/", "/home", "/homepage"})
-public class MainController {
+@RequestMapping("/tasks")
+public class TasksController {
     @RequestMapping(method = RequestMethod.GET)
-    public String main() {
-        return "redirect:/tasks";
+    public String defaultPage() {
+        return "main";
     }
 }

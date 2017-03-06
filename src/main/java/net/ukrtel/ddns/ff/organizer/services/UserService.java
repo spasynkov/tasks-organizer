@@ -75,4 +75,12 @@ public class UserService implements UserDetailsService {
         user.setAdmin(isAdmin);
         return user;
     }
+
+    public User findUserByName(String name) {
+        return usersRepository.findByUsername(name);
+    }
+
+    public User findUserById(long id) {
+        return usersRepository.findOne(id);
+    }
 }

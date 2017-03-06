@@ -6,10 +6,10 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table
+@Table(name = "tasks")
 public class Task {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)
