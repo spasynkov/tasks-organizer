@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -87,5 +88,9 @@ public class UserService implements UserDetailsService {
 
     public User findUserById(long id) {
         return usersRepository.findOne(id);
+    }
+
+    public List<String> collectAllUsersNames() {
+        return usersRepository.findAll().stream().map(User::getUsername).collect(Collectors.toList());
     }
 }

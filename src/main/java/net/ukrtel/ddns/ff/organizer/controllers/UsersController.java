@@ -23,6 +23,12 @@ public class UsersController {
         this.userService = userService;
     }
 
+    @RequestMapping(method = GET)
+    public String usersList(Model model) {
+        model.addAttribute("users", userService.collectAllUsersNames());
+        return "users";
+    }
+
     @RequestMapping(value = "/me", method = GET)
     public String myProfile(Principal principal, Model model) {
         User user = userService.findUserByName(principal.getName());
