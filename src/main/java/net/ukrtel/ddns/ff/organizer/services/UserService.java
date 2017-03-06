@@ -1,6 +1,7 @@
 package net.ukrtel.ddns.ff.organizer.services;
 
 import net.ukrtel.ddns.ff.organizer.domain.User;
+import net.ukrtel.ddns.ff.organizer.exceptions.DuplicateUsernameException;
 import net.ukrtel.ddns.ff.organizer.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -69,6 +70,10 @@ public class UserService implements UserDetailsService {
     }
 
     private User createUser(String username, String password, boolean isAdmin) {
+        if ("me".equals(username)) {
+            throw new DuplicateUsernameException("Can't add user with name 'me'. Such name is in use already.");
+        }
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
