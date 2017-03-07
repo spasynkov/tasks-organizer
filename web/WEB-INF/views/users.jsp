@@ -6,10 +6,10 @@
 </head>
 <body>
 <H3>Users:</H3>
-<ul>
+<ol>
     <c:forEach items="${users}" var="username">
         <li><a href="/users/<c:out value="${username}" />"><c:out value="${username}"/></a></li>
     </c:forEach>
-</ul>
+</ol>
 </body>
 </html>
