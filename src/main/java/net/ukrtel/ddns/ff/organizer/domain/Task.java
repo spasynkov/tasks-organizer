@@ -13,17 +13,15 @@ public class Task {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "author_id", nullable = false, updatable = false)
     private User author;
 
     private String description;
     private long timestampOfCreation;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "performer_id", updatable = false)
+    @ManyToOne
     private User performer;
 
-    private long timestampOfClose;
+    private Long timestampOfClose;
 
     private TaskStatus status;
 }
