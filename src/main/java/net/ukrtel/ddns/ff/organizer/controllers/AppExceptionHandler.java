@@ -1,6 +1,7 @@
 package net.ukrtel.ddns.ff.organizer.controllers;
 
 import net.ukrtel.ddns.ff.organizer.exceptions.DuplicateUsernameException;
+import net.ukrtel.ddns.ff.organizer.exceptions.NoTaskFoundException;
 import net.ukrtel.ddns.ff.organizer.exceptions.UserNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,6 +18,12 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(DuplicateUsernameException.class)
     public String cantRegisterUser(DuplicateUsernameException e, Model model) {
+        model.addAttribute("message", e.getMessage());
+        return "errors/exception";
+    }
+
+    @ExceptionHandler(NoTaskFoundException.class)
+    public String noTasksFound(NoTaskFoundException e, Model model) {
         model.addAttribute("message", e.getMessage());
         return "errors/exception";
     }
