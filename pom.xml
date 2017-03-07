@@ -120,6 +120,14 @@
             <version>5.1.39</version>
         </dependency>
 
+        <!-- postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.0.0.jre7</version>
+        </dependency>
+
+
         <!-- c3p0 -->
         <dependency>
             <groupId>com.mchange</groupId>

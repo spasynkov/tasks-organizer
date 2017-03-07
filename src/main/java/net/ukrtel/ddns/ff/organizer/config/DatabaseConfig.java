@@ -18,6 +18,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
+import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories({"net.ukrtel.ddns.ff.organizer.repositories"})
@@ -25,19 +26,23 @@ import java.beans.PropertyVetoException;
 public class DatabaseConfig {
     private final Environment env;
     private final String domainPackages = "net.ukrtel.ddns.ff.organizer.domain";
+    private final String dbType;
+    private final String propertiesPrefix;
 
     @Autowired
     public DatabaseConfig(Environment env) {
         this.env = env;
+        this.dbType = this.env.getRequiredProperty("db.type").toUpperCase();
+        this.propertiesPrefix = "db." + this.dbType.toLowerCase() + ".";
     }
 
     @Bean
     public DataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setDriverClass(env.getRequiredProperty("db.driver"));
-        dataSource.setJdbcUrl(env.getRequiredProperty("db.url"));
-        dataSource.setUser(env.getRequiredProperty("db.user"));
-        dataSource.setPassword(env.getRequiredProperty("db.password"));
+        dataSource.setDriverClass(env.getRequiredProperty(propertiesPrefix + "driver"));
+        dataSource.setJdbcUrl(env.getRequiredProperty(propertiesPrefix + "url"));
+        dataSource.setUser(env.getRequiredProperty(propertiesPrefix + "user"));
+        dataSource.setPassword(env.getRequiredProperty(propertiesPrefix + "password"));
 
         dataSource.setMinPoolSize(5);
         dataSource.setMaxPoolSize(20);
@@ -48,10 +53,10 @@ public class DatabaseConfig {
     @Bean   // setting JPA vendor as hibernate
     public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-        adapter.setDatabase(Database.MYSQL);
+        adapter.setDatabase(Database.valueOf(dbType));
         adapter.setShowSql(true);
         adapter.setGenerateDdl(false);
-        adapter.setDatabasePlatform(env.getRequiredProperty("db.dialect"));
+        adapter.setDatabasePlatform(env.getRequiredProperty(propertiesPrefix + "dialect"));
         return adapter;
     }
 
@@ -62,9 +67,9 @@ public class DatabaseConfig {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         bean.setDataSource(dataSource);
         bean.setJpaVendorAdapter(jpaVendorAdapter);
-        /*Properties properties = new Properties();
+        Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "create");
-        bean.setJpaProperties(properties);*/
+        bean.setJpaProperties(properties);
         bean.setPackagesToScan(domainPackages);
         return bean;
     }
