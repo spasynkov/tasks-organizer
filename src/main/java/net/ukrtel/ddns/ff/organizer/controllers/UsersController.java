@@ -1,7 +1,6 @@
 package net.ukrtel.ddns.ff.organizer.controllers;
 
 import net.ukrtel.ddns.ff.organizer.domain.User;
-import net.ukrtel.ddns.ff.organizer.exceptions.UserNotFoundException;
 import net.ukrtel.ddns.ff.organizer.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,7 @@ public class UsersController {
 
     @RequestMapping(value = "/me", method = GET)
     public String myProfile(Principal principal, Model model) {
-        User user = userService.findUserByName(principal.getName());
+        User user = userService.findUserByName(principal.getName(), true);
         model.addAttribute(user);
         return "profile";
     }
@@ -43,16 +42,13 @@ public class UsersController {
         // will try to find user by id
         try {
             long id = Long.parseLong(userIdentifier);
-            user = userService.findUserById(id);
+            user = userService.findUserById(id, true);
         } catch (NumberFormatException e) {
             // do nothing
         }
 
         // if there was no user with such id - it could be username
-        if (user == null) user = userService.findUserByName(userIdentifier);
-
-        // if still nothing
-        if (user == null) throw new UserNotFoundException("Can't find user '" + userIdentifier + "'.");
+        if (user == null) user = userService.findUserByName(userIdentifier, true);
 
         model.addAttribute(user);
         return "profile";

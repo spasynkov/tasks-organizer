@@ -2,6 +2,7 @@ package net.ukrtel.ddns.ff.organizer.services;
 
 import net.ukrtel.ddns.ff.organizer.domain.User;
 import net.ukrtel.ddns.ff.organizer.exceptions.DuplicateUsernameException;
+import net.ukrtel.ddns.ff.organizer.exceptions.UserNotFoundException;
 import net.ukrtel.ddns.ff.organizer.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -82,12 +83,18 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User findUserByName(String name) {
-        return usersRepository.findByUsername(name);
+    public User findUserByName(String name, boolean secured) {
+        User user = usersRepository.findByUsername(name);
+        if (user == null) throw new UserNotFoundException("Can't find user '" + name + "'.");
+        if (secured) user.setPassword(null);
+        return user;
     }
 
-    public User findUserById(long id) {
-        return usersRepository.findOne(id);
+    public User findUserById(long id, boolean secured) {
+        User user = usersRepository.findOne(id);
+        if (user == null) throw new UserNotFoundException("Can't find user '" + id + "'.");
+        if (secured) user.setPassword(null);
+        return user;
     }
 
     public List<String> collectAllUsersNames() {

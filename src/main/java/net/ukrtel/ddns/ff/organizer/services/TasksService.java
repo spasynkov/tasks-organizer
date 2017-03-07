@@ -3,6 +3,7 @@ package net.ukrtel.ddns.ff.organizer.services;
 import net.ukrtel.ddns.ff.organizer.domain.Task;
 import net.ukrtel.ddns.ff.organizer.domain.User;
 import net.ukrtel.ddns.ff.organizer.exceptions.IllegalTaskStateException;
+import net.ukrtel.ddns.ff.organizer.exceptions.NoTaskFoundException;
 import net.ukrtel.ddns.ff.organizer.repositories.TasksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,10 +76,14 @@ public class TasksService {
     }
 
     public List<Task> listAllTasks() {
-        return tasksRepository.findAll();
+        List<Task> result = tasksRepository.findAll();
+        if (result == null || result.isEmpty()) throw new NoTaskFoundException("There are no tasks at server.");
+        return result;
     }
 
     public Task getTaskById(long id) {
-        return tasksRepository.findOne(id);
+        Task task = tasksRepository.findOne(id);
+        if (task == null) throw new NoTaskFoundException("There is no task with id '" + id + "'.");
+        return task;
     }
 }
